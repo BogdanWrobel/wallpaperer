@@ -1,0 +1,19 @@
+{
+  "folder": "catalina",
+  "sunrise": [
+    "3.jpg",
+    "4.jpg"
+  ],
+  "day": [
+    "5.jpg",
+    "6.jpg",
+    "7.jpg"
+  ],
+  "sunset": [
+    "1.jpg",
+    "8.jpg"
+  ],
+  "night": [
+    "2.jpg"
+  ]
+}
