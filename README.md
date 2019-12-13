@@ -18,4 +18,4 @@ All images are (c) by Apple Inc.
 
 
 ## How to use
-Set execution of the attached executable using Windows Task Scheduler to run on user login and every hour (or more often, if you prefer); just make sure to set _Start in..._ property to executable path.
+Set execution of the attached VBS script using Windows Task Scheduler to run on user login and every hour (or more often, if you prefer); just make sure to set _Start in..._ property to the path where `wallpaperer.ps1` is located.
