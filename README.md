@@ -5,7 +5,7 @@ Time and location-based Windows 10 wallpaper, lockscreen and system theme change
 
 > This code was written just for fun and is provided AS-IS, if it breaks your machine, cat, dishwasher, mood or anything, **you** take full responsibility.
 
-**Requirements **
+**Requirements**
 
 > You should enable local script execution by calling `set-executionpolicy remotesigned` in admin PowerShell console.
 
