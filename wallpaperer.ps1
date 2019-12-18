@@ -1,9 +1,5 @@
-# $base = $PSScriptRoot
-$base = Get-Location
-# $culture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US")
-# $culture.NumberFormat.NumberDecimalSeparator = "."
-# $culture.NumberFormat.NumberGroupSeparator = " "
-# [System.Threading.Thread]::CurrentThread.CurrentCulture = $culture
+$base = $PSScriptRoot
+# $base = Get-Location
 Import-Module -Name .\lib\system\culture.psm1
 Import-Module -Name .\lib\sun\sunevents.psm1
 Import-Module -Name .\lib\wallpaper\wallpaper.psm1
@@ -12,6 +8,7 @@ Import-Module -Name .\lib\theme\theme.psm1
 Import-Module -Name .\lib\time\time.psm1
 Import-Module -Name .\lib\location\coordinates.psm1
 Import-Module -Name .\lib\settings\location.psm1
+Import-Module -Name .\lib\settings\themepath.psm1
 Import-Module -Name .\lib\settings\regpaths.psm1
 Import-Module -Name .\lib\system\brightness.psm1
 
@@ -125,20 +122,8 @@ function set-SystemAndAppTheme([string]$section) {
     }
 }
 
-function get-themePath {
-    $theme = "${base}\themes\theme_catalina.json"
-    if (Test-Path -Path $regPath) {
-        $properties = Get-ItemProperty -Path $regPath 
-        if ($properties -and
-            $null -ne (Get-Member -InputObject $properties -Name $regTheme)) {
-            $theme = Get-ItemPropertyValue -Path $regPath -Name $regTheme
-        }
-    }
-    return ${theme}
-}
-
 resetCulture
-$themePath = get-themePath
+$themePath = get-SavedThemePath
 $theme = get-Theme -themePath $themePath
 if ($null -ne $theme) {
     $settings = get-NameAndImage -theme $theme
