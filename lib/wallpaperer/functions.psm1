@@ -1,6 +1,6 @@
 Import-Module .\lib\location\coordinates.psm1
 Import-Module .\lib\time\time.psm1
-Import-Module .\lib\settings\location.psm1
+Import-Module .\lib\regconfig\location.psm1
 
 function getSunEventsForHereAndNow {
     Write-Host "Retrieving sun events for here and now"

@@ -1,4 +1,4 @@
-Import-Module -Name .\lib\settings\regpaths.psm1
+Import-Module -Name .\lib\regconfig\regpaths.psm1
 
 function getSavedThemePath([string]$basePath) {
     $cfgKeys = getConfigNames

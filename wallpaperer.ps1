@@ -4,12 +4,12 @@ Import-Module -Name .\lib\system\culture.psm1
 Import-Module -Name .\lib\sun\sunevents.psm1
 Import-Module -Name .\lib\system\wallpaper.psm1
 Import-Module -Name .\lib\system\lockscreen.psm1
-Import-Module -Name .\lib\theme\theme.psm1
+Import-Module -Name .\lib\system\theme.psm1
 Import-Module -Name .\lib\time\time.psm1
 Import-Module -Name .\lib\location\coordinates.psm1
-Import-Module -Name .\lib\settings\location.psm1
+Import-Module -Name .\lib\regconfig\location.psm1
 Import-Module -Name .\lib\theme\themepath.psm1
-Import-Module -Name .\lib\settings\regpaths.psm1
+Import-Module -Name .\lib\regconfig\regpaths.psm1
 Import-Module -Name .\lib\system\brightness.psm1
 Import-Module -Name .\lib\wallpaperer\functions.psm1
 

@@ -1,6 +1,6 @@
 Import-Module -Name .\lib\system\culture.psm1
 Import-Module -Name .\lib\location\coordinates.psm1
-Import-Module -Name .\lib\settings\location.psm1
+Import-Module -Name .\lib\regconfig\location.psm1
 Import-Module -Name .\lib\theme\themepath.psm1
 
 function get-SettingsForm {

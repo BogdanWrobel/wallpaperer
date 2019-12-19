@@ -1,4 +1,4 @@
-Import-Module .\lib\settings\regpaths.psm1
+Import-Module .\lib\regconfig\regpaths.psm1
 Import-Module .\lib\time\time.psm1
 
 function setStoredLocation([double]$latitude, [double]$longitude) {
