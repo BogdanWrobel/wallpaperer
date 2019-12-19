@@ -1,4 +1,4 @@
-function set-Brightness([int]$brightness) {
+function setScreenBrightness([int]$brightness) {
     Write-Host "Setting brightness to ${brightness}"
     try {
         $ErrorActionPreference = "SilentlyContinue"
@@ -11,4 +11,4 @@ function set-Brightness([int]$brightness) {
     }
 }
 
-Export-ModuleMember -Function set-Brightness
+Export-ModuleMember -Function setScreenBrightness

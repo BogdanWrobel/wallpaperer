@@ -1,4 +1,4 @@
-function get-SunEvents([int]$year, [int]$month, [int]$day, [double]$latitude, [double]$longitude) {
+function getSunEvents([int]$year, [int]$month, [int]$day, [double]$latitude, [double]$longitude) {
     Write-Host "Calculating sun events for ${year}-${month}-${day} @ ${latitude} : ${longitude}"
     $R = $year
     $M = $month
@@ -25,4 +25,4 @@ function get-SunEvents([int]$year, [int]$month, [int]$day, [double]$latitude, [d
     return $value
 }
 
-Export-ModuleMember -Function get-SunEvents
+Export-ModuleMember -Function getSunEvents

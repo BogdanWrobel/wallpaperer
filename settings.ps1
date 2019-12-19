@@ -1,7 +1,7 @@
 Import-Module -Name .\lib\system\culture.psm1
 Import-Module -Name .\lib\location\coordinates.psm1
 Import-Module -Name .\lib\settings\location.psm1
-Import-Module -Name .\lib\settings\themepath.psm1
+Import-Module -Name .\lib\theme\themepath.psm1
 
 function get-SettingsForm {
     Add-Type -AssemblyName System.Windows.Forms
@@ -112,7 +112,7 @@ function get-SettingsForm {
         $latTextBox.Enabled = $false
         $lonTextBox.Enabled = $false
 
-        $coords = get-Coordinates
+        $coords = getCoordinates
         $latTextBox.Lines = $coords.Latitude
         $lonTextBox.Lines = $coords.Longitude
 
@@ -122,19 +122,20 @@ function get-SettingsForm {
     }.GetNewClosure()
 
     $saveSettingsClickHandler = {
-        set-StoredLocation -latitude $latTextBox.Text -longitude $lonTextBox.Text
-        setAutoUpdate -enable $autoLocationCheckBox.Checked
+        setStoredLocation -latitude $latTextBox.Text -longitude $lonTextBox.Text
+        setAutoUpdateEnabled -enable $autoLocationCheckBox.Checked
+        $settingsForm.Close()
     }.GetNewClosure()
 
     $detectlocationButton.Add_Click($detectLocationClickHandler)
     $okButton.Add_Click($saveSettingsClickHandler)
 
     # loading current settings
-    $savedCoords = get-StoredLocation
+    $savedCoords = getStoredLocation
     $latTextBox.Lines = $savedCoords.Latitude
     $lonTextBox.Lines = $savedCoords.Longitude
-    $themeTextBox.Lines = get-SavedThemePath -basePath $PSScriptRoot
-    $autoLocationCheckBox.Checked = isAutoUpdate
+    $themeTextBox.Lines = getSavedThemePath -basePath $PSScriptRoot
+    $autoLocationCheckBox.Checked = isAutoUpdateEnabled
 
     return $settingsForm
 }

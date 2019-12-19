@@ -1,18 +1,18 @@
 Import-Module .\lib\settings\regpaths.psm1
 Import-Module .\lib\time\time.psm1
 
-function set-StoredLocation([double]$latitude, [double]$longitude) {
+function setStoredLocation([double]$latitude, [double]$longitude) {
     Write-Host "Saving location for further use"
     $cfgKeys = getConfigNames
 
-    $ts = get-Timestamp
+    $ts = getTimestamp
 
     set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regLat -value $latitude -Force
     set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regLon -value $longitude -Force
     set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regStamp -value $ts -Force
 }
 
-function get-StoredLocation {
+function getStoredLocation {
     Write-Host "Attempting to retrieve saved location."
     $cfgKeys = getConfigNames
 
@@ -32,7 +32,7 @@ function get-StoredLocation {
     return $value
 }
 
-function isAutoUpdate {
+function isAutoUpdateEnabled {
     $cfgKeys = getConfigNames
 
     if (Test-Path -Path $cfgKeys.regPath) {
@@ -46,10 +46,10 @@ function isAutoUpdate {
     return $false
 }
 
-function setAutoUpdate([bool]$enable) {
+function setAutoUpdateEnabled([bool]$enable) {
     $cfgKeys = getConfigNames
 
-    set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regAutoUpdate -value $enabled -Force
+    set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regAutoUpdate -value $enable -Force
 }
 
-Export-ModuleMember -Function get-StoredLocation, set-StoredLocation, isAutoUpdate, setAutoUpdate
+Export-ModuleMember -Function getStoredLocation, setStoredLocation, isAutoUpdateEnabled, setAutoUpdateEnabled

@@ -1,4 +1,4 @@
-function set-LockscreenWallpaper([string]$imagePath) {
+function setLockscreenWallpaper([string]$imagePath) {
     $ProgressPreference = "SilentlyContinue"
     Write-Host "Lockscreen wallpaper to set: ${imagePath}"
     $newImagePath = "${env:TEMP}\" + (New-Guid).Guid + [System.IO.Path]::GetExtension($imagePath)
@@ -25,4 +25,4 @@ function set-LockscreenWallpaper([string]$imagePath) {
     $ProgressPreference = "Continue"
 }
 
-Export-ModuleMember -Function set-LockscreenWallpaper
+Export-ModuleMember -Function setLockscreenWallpaper

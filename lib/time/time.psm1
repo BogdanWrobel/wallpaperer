@@ -1,15 +1,15 @@
-function get-Hour {
+function getHourAsDecimal {
     $hour = (get-Date -Format "HH,mm").Split(",")
     return ([int]$hour[0]) + ([int]($hour[1])/60)
 }
 
-function get-TzOffset {
+function getTimezoneOffset {
     $off = Get-Date -UFormat "%Z"
     [convert]::ToInt32($off)
 }
 
-function get-Timestamp {
+function getTimestamp {
     return [Math]::Floor([decimal](Get-Date(Get-Date).ToUniversalTime()-uformat "%s"))
 }
 
-Export-ModuleMember get-Hour, get-TzOffset, get-Timestamp
+Export-ModuleMember getHourAsDecimal, getTimezoneOffset, getTimestamp

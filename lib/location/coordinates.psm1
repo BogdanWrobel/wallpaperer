@@ -1,4 +1,4 @@
-function get-Coordinates {
+function getCoordinates {
     Write-Host "Starting location resolver"
     Add-Type -AssemblyName System.Device 
     $GeoWatcher = New-Object System.Device.Location.GeoCoordinateWatcher
@@ -23,4 +23,4 @@ function get-Coordinates {
     return $value
 }
 
-Export-ModuleMember -Function get-Coordinates
+Export-ModuleMember -Function getCoordinates

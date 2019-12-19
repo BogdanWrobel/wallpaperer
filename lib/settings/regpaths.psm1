@@ -11,11 +11,11 @@ $wallpapererKeys = @{
 }
 
 function getConfigNames {
-    ensureRegPath
+    ensureRegPathExists
     return $wallpapererKeys
 }
 
-function ensureRegPath {
+function ensureRegPathExists {
     if (!(Test-Path -Path "${wallpapererKeys.baseReg}\${wallpapererKeys.companyReg}")) {
         New-Item -Path "${wallpapererKeys.baseReg}\${wallpapererKeys.companyReg}"
     }
@@ -24,4 +24,4 @@ function ensureRegPath {
     } 
 }
 
-Export-ModuleMember -Function getConfigNames, ensureRegPath
+Export-ModuleMember -Function getConfigNames, ensureRegPathExists

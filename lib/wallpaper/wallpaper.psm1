@@ -1,4 +1,4 @@
-function set-Wallpaper([string]$desktopImage) {
+function setDesktopWallpaper([string]$desktopImage) {
     Write-Host "Wallpaper to set: ${desktopImage}"
     Add-Type -TypeDefinition @" 
         using System; 
@@ -24,4 +24,4 @@ function set-Wallpaper([string]$desktopImage) {
         
 }
 
-Export-ModuleMember -Function set-Wallpaper
+Export-ModuleMember -Function setDesktopWallpaper
