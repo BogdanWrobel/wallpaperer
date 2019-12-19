@@ -16,6 +16,7 @@ function get-SunEventsForHereAndNow {
     Write-Host "Retrieving sun events for here and now"
     $coords = get-StoredLocation
     $ts = get-Timestamp
+    $autoUpdate = isAutoUpdate
     if (($null -eq $coords.timestamp) -or ([long]$coords.timestamp + 86400 -lt [long]$ts) -or $null -eq $coords.latitude -or $null -eq $coords.longitude) {
         Write-Host "No or outdated coords, calculating new."
         $c = get-Coordinates

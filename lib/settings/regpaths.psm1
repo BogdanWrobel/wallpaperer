@@ -1,11 +1,17 @@
-$baseReg = "HKCU:Software"
-$companyReg = "WrobelConsulting"
-$appReg = "Wallpaperer"
-$regPath = "${baseReg}\${companyReg}\${appReg}"
+$wallpapererKeys = @{
+    baseReg = "HKCU:Software"
+    companyReg = "WrobelConsulting"
+    appReg = "Wallpaperer"
+    regPath = "HKCU:Software\WrobelConsulting\Wallpaperer"
+    regLat = "Latitude"
+    regLon = "Longitude"
+    regStamp = "Timestamp"
+    regTheme = "Theme"
+    regAutoUpdate = "AutoUpdate"    
+}
 
-$regLat = "Latitude"
-$regLon = "Longitude"
-$regStamp = "Timestamp"
-$regTheme = "Theme"
+function getConfigNames {
+    return $wallpapererKeys
+}
 
-Export-ModuleMember -Variable $baseReg, $companyReg, $appReg, $regPath, $regLat, $regLon, $regStamp, $regTheme
+Export-ModuleMember -Function getConfigNames
