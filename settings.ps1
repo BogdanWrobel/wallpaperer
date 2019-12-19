@@ -153,9 +153,9 @@ function get-SettingsForm {
         setAutoUpdateEnabled -enable $autoLocationCheckBox.Checked
         setSavedThemePath -themePath $themeTextBox.Text
         $okButton.Text = "Applying..."
-        $settingsForm.UseWaitCursor = $true
-        $settingsForm.Close()
+        $settingsForm.Enabled = $false
         . .\wallpaperer.ps1
+        $settingsForm.Close()
     }.GetNewClosure()
 
     $changeThemeClickHandler = {
