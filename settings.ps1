@@ -1,10 +1,31 @@
+# Hide PowerShell Console
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
+$consolePtr = [Console.Window]::GetConsoleWindow()
+[Console.Window]::ShowWindow($consolePtr, 0)
+
 Import-Module -Name .\lib\system\culture.psm1
+Import-Module -Name .\lib\sun\sunevents.psm1
+Import-Module -Name .\lib\system\wallpaper.psm1
+Import-Module -Name .\lib\system\lockscreen.psm1
+Import-Module -Name .\lib\system\theme.psm1
+Import-Module -Name .\lib\time\time.psm1
 Import-Module -Name .\lib\location\coordinates.psm1
 Import-Module -Name .\lib\regconfig\location.psm1
 Import-Module -Name .\lib\theme\themepath.psm1
+Import-Module -Name .\lib\regconfig\regpaths.psm1
+Import-Module -Name .\lib\system\brightness.psm1
+Import-Module -Name .\lib\wallpaperer\functions.psm1
+
+
 
 function get-SettingsForm {
     Add-Type -AssemblyName System.Windows.Forms
+    Add-Type -AssemblyName PresentationFramework
     [System.Windows.Forms.Application]::EnableVisualStyles()
     $Font = New-Object System.Drawing.Font("Segoe UI",12,[System.Drawing.FontStyle]::Regular,[System.Drawing.GraphicsUnit]::Pixel)
 
@@ -13,6 +34,11 @@ function get-SettingsForm {
     $settingsForm.ClientSize         = '290,211'
     $settingsForm.text               = "Wallpaperer"
     $settingsForm.TopMost            = $true
+    $settingsForm.TopMost            = $true
+    $settingsForm.FormBorderStyle    = 1 # FormBorderStyle.FixedSingle
+    $settingsForm.MaximizeBox        = $false
+    $settingsForm.MinimizeBox        = $false
+    
 
     $lonLabel                        = New-Object system.Windows.Forms.Label
     $lonLabel.text                   = "Longitude"
@@ -80,32 +106,33 @@ function get-SettingsForm {
     $themeTextBox.height             = 20
     $themeTextBox.location           = New-Object System.Drawing.Point(10,14)
     $themeTextBox.Font               = $Font
+    $themeTextBox.ReadOnly           = $true
 
     $changeThemeButton               = New-Object system.Windows.Forms.Button
     $changeThemeButton.text          = "..."
     $changeThemeButton.width         = 60
-    $changeThemeButton.height        = 19
+    $changeThemeButton.height        = 25
     $changeThemeButton.location      = New-Object System.Drawing.Point(208,13)
     $changeThemeButton.Font          = $Font
 
     $okButton                        = New-Object system.Windows.Forms.Button
-    $okButton.text                   = "OK"
-    $okButton.width                  = 60
+    $okButton.text                   = "Save"
+    $okButton.width                  = 90
     $okButton.height                 = 30
-    $okButton.location               = New-Object System.Drawing.Point(114,173)
+    $okButton.location               = New-Object System.Drawing.Point(99,173)
     $okButton.Font                   = $Font
 
-    $trackBar                        = New-Object System.Windows.Forms.TrackBar
-    $trackBar.width                  = 400
-    $trackBar.height                 = 30
-    $trackBar.location               = New-Object System.Drawing.Point(0,183)
-    $trackBar.Font                   = $Font
+    # $trackBar                        = New-Object System.Windows.Forms.TrackBar
+    # $trackBar.width                  = 400
+    # $trackBar.height                 = 30
+    # $trackBar.location               = New-Object System.Drawing.Point(0,183)
+    # $trackBar.Font                   = $Font
 
     
 
     $locationGroupbox.controls.AddRange(@($lonLabel,$latLabel,$lonTextBox,$latTextBox,$detectlocationButton,$autoLocationCheckBox))
     $themeGroupBox.controls.AddRange(@($themeTextBox,$changeThemeButton))
-    $settingsForm.controls.AddRange(@($locationGroupbox,$themeGroupBox,$okButton,$trackBar))
+    $settingsForm.controls.AddRange(@($locationGroupbox,$themeGroupBox,$okButton))
 
     $detectLocationClickHandler = { 
         $detectlocationButton.Enabled = $false
@@ -124,11 +151,33 @@ function get-SettingsForm {
     $saveSettingsClickHandler = {
         setStoredLocation -latitude $latTextBox.Text -longitude $lonTextBox.Text
         setAutoUpdateEnabled -enable $autoLocationCheckBox.Checked
+        setSavedThemePath -themePath $themeTextBox.Text
+        $okButton.Text = "Applying..."
+        $settingsForm.UseWaitCursor = $true
         $settingsForm.Close()
+        . .\wallpaperer.ps1
+    }.GetNewClosure()
+
+    $changeThemeClickHandler = {
+        Add-Type -AssemblyName System.Windows.Forms
+        $FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{
+            InitialDirectory = [System.IO.Path]::GetDirectoryName($themeTextBox.Text)
+            Filter = 'Themes (*.json)|*.json' 
+        }
+        $FileBrowser.ShowDialog()
+        if ("" -ne $FileBrowser.FileName) {
+            $themeValid = isThemeValid -themePath $FileBrowser.FileName
+            if ($themeValid) {
+                $themeTextBox.Lines = $FileBrowser.FileName
+            } else {
+                $null = (New-Object -ComObject Wscript.Shell).Popup('Theme file looks invalid, please try again.', 0, 'Error', 16)
+            }
+        }
     }.GetNewClosure()
 
     $detectlocationButton.Add_Click($detectLocationClickHandler)
     $okButton.Add_Click($saveSettingsClickHandler)
+    $changeThemeButton.Add_Click($changeThemeClickHandler)
 
     # loading current settings
     $savedCoords = getStoredLocation
@@ -143,4 +192,4 @@ function get-SettingsForm {
 resetCulture
 
 $form = get-SettingsForm
-$form.ShowDialog()
+$null = $form.ShowDialog()

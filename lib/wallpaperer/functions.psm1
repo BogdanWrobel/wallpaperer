@@ -1,3 +1,4 @@
+Import-Module .\lib\sun\sunevents.psm1
 Import-Module .\lib\location\coordinates.psm1
 Import-Module .\lib\time\time.psm1
 Import-Module .\lib\regconfig\location.psm1
@@ -88,6 +89,24 @@ function loadTheme([string]$themePath) {
         return [IO.File]::ReadAllText($themePath) | ConvertFrom-Json
     } catch {
         return $null
+    }
+}
+
+function isThemeValid([string]$themePath) {
+    $theme = loadTheme -themePath $themePath
+    if ($null -ne $theme -and
+        $null -ne $theme.folder -and
+        "" -ne $theme.folder -and
+        $null -ne $theme.sunrise -and
+        $null -ne $theme.sunset -and
+        $null -ne $theme.day -and
+        $null -ne $theme.night) {
+
+        $imagesPath = "{0}\{1}" -F $themePath, $theme.folder
+
+        return $true
+    } else {
+        return $false
     }
 }
 

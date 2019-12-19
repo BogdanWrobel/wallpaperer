@@ -13,4 +13,10 @@ function getSavedThemePath([string]$basePath) {
     return $theme
 }
 
-Export-ModuleMember -Function getSavedThemePath
+function setSavedThemePath([string]$themePath) {
+    $cfgKeys = getConfigNames
+
+    set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regTheme -value $themePath -Force
+}
+
+Export-ModuleMember -Function getSavedThemePath, setSavedThemePath
