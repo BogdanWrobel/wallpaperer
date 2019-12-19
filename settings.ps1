@@ -107,7 +107,7 @@ function get-SettingsForm {
     $themeGroupBox.controls.AddRange(@($themeTextBox,$changeThemeButton))
     $settingsForm.controls.AddRange(@($locationGroupbox,$themeGroupBox,$okButton,$trackBar))
 
-    $handler = { 
+    $detectLocationClickHandler = { 
         $detectlocationButton.Enabled = $false
         $latTextBox.Enabled = $false
         $lonTextBox.Enabled = $false
@@ -121,13 +121,20 @@ function get-SettingsForm {
         $detectlocationButton.Enabled = $true
     }.GetNewClosure()
 
-    $detectlocationButton.Add_Click($handler)
+    $saveSettingsClickHandler = {
+        set-StoredLocation -latitude $latTextBox.Text -longitude $lonTextBox.Text
+        setAutoUpdate -enable $autoLocationCheckBox.Checked
+    }.GetNewClosure()
+
+    $detectlocationButton.Add_Click($detectLocationClickHandler)
+    $okButton.Add_Click($saveSettingsClickHandler)
 
     # loading current settings
     $savedCoords = get-StoredLocation
     $latTextBox.Lines = $savedCoords.Latitude
     $lonTextBox.Lines = $savedCoords.Longitude
-    $themeTextBox.Lines = get-SavedThemePath
+    $themeTextBox.Lines = get-SavedThemePath -basePath $PSScriptRoot
+    $autoLocationCheckBox.Checked = isAutoUpdate
 
     return $settingsForm
 }

@@ -17,23 +17,28 @@ function get-SunEventsForHereAndNow {
     $coords = get-StoredLocation
     $ts = get-Timestamp
     $autoUpdate = isAutoUpdate
-    if (($null -eq $coords.timestamp) -or ([long]$coords.timestamp + 86400 -lt [long]$ts) -or $null -eq $coords.latitude -or $null -eq $coords.longitude) {
-        Write-Host "No or outdated coords, calculating new."
-        $c = get-Coordinates
-        $coords.latitude = $c.latitude
-        $coords.longitude = $c.longitude
-        set-StoredLocation -latitude $coords.latitude -longitude $coords.longitude
-    } else {
-        Write-Host "Using cached location."
-    }
 
-    Write-Host "coords = ${coords}"
-    $date = (get-Date -Format "yyyy,M,d").Split(",")
-    $offset = get-TzOffset
-    $events = (get-SunEvents -year $date[0] -month $date[1] -day $date[2] -latitude $coords.Latitude -longitude $coords.Longitude)
-    $events.sunrise += $offset
-    $events.sunset += $offset
-    $events.transition += $offset
+    if ((($null -eq $coords.latitude) -or ($null -eq $coords.longitude)) -and $false -eq $autoUpdate) {
+        Write-Error "No location defined and auto-update disabled, can't continue."
+    } else {
+        if (($null -eq $coords.timestamp) -or ([long]$coords.timestamp + 86400 -lt [long]$ts) -or $null -eq $coords.latitude -or $null -eq $coords.longitude) {
+            Write-Host "No or outdated coords, calculating new."
+            $c = get-Coordinates
+            $coords.latitude = $c.latitude
+            $coords.longitude = $c.longitude
+            set-StoredLocation -latitude $coords.latitude -longitude $coords.longitude
+        } else {
+            Write-Host "Using cached location."
+        }
+    
+        Write-Host "coords = ${coords}"
+        $date = (get-Date -Format "yyyy,M,d").Split(",")
+        $offset = get-TzOffset
+        $events = (get-SunEvents -year $date[0] -month $date[1] -day $date[2] -latitude $coords.Latitude -longitude $coords.Longitude)
+        $events.sunrise += $offset
+        $events.sunset += $offset
+        $events.transition += $offset
+    }
     return $events 
 }
 
@@ -124,7 +129,7 @@ function set-SystemAndAppTheme([string]$section) {
 }
 
 resetCulture
-$themePath = get-SavedThemePath
+$themePath = get-SavedThemePath -basePath $base
 $theme = get-Theme -themePath $themePath
 if ($null -ne $theme) {
     $settings = get-NameAndImage -theme $theme

@@ -1,15 +1,9 @@
 Import-Module .\lib\settings\regpaths.psm1
-
-$cfgKeys = getConfigNames
+Import-Module .\lib\time\time.psm1
 
 function set-StoredLocation([double]$latitude, [double]$longitude) {
     Write-Host "Saving location for further use"
-    if (!(Test-Path -Path "${cfgKeys.baseReg}\${cfgKeys.companyReg}")) {
-        New-Item -Path "${cfgKeys.baseReg}\${cfgKeys.companyReg}"
-    }
-    if (!(Test-Path -Path "${cfgKeys.regPath}")) {
-        New-Item -Path "${cfgKeys.regPath}"
-    } 
+    $cfgKeys = getConfigNames
 
     $ts = get-Timestamp
 
@@ -20,25 +14,27 @@ function set-StoredLocation([double]$latitude, [double]$longitude) {
 
 function get-StoredLocation {
     Write-Host "Attempting to retrieve saved location."
+    $cfgKeys = getConfigNames
+
     $value = "" | Select-Object -Property latitude,longitude,timestamp,autoupdate
-    if (Test-Path -Path $cfgKeys.regPath) {
-        $properties = Get-ItemProperty -Path $cfgKeys.regPath 
-        if ($properties -and
-            $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regLat) -and
-            $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regLon) -and
-            $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regStamp)) {
-           
-            $lat = Get-ItemPropertyValue -Path $cfgKeys.regPath -Name $cfgKeys.regLat
-            $lon = Get-ItemPropertyValue -Path $cfgKeys.regPath -Name $cfgKeys.regLon
-            $value.latitude = ([double]::Parse($lat))
-            $value.longitude = ([double]::Parse($lon))
-            $value.timestamp = Get-ItemPropertyValue -Path $cfgKeys.regPath -Name $cfgKeys.regStamp
-        }
+    $properties = Get-ItemProperty -Path $cfgKeys.regPath 
+    if ($null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regLat) -and
+        $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regLon) -and
+        $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regStamp)) {
+        
+        $lat = Get-ItemPropertyValue -Path $cfgKeys.regPath -Name $cfgKeys.regLat
+        $lon = Get-ItemPropertyValue -Path $cfgKeys.regPath -Name $cfgKeys.regLon
+        $value.latitude = ([double]::Parse($lat))
+        $value.longitude = ([double]::Parse($lon))
+        $value.timestamp = Get-ItemPropertyValue -Path $cfgKeys.regPath -Name $cfgKeys.regStamp
     }
+    
     return $value
 }
 
 function isAutoUpdate {
+    $cfgKeys = getConfigNames
+
     if (Test-Path -Path $cfgKeys.regPath) {
         $properties = Get-ItemProperty -Path $cfgKeys.regPath 
         if ($properties -and $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regAutoUpdate)) {
@@ -50,4 +46,10 @@ function isAutoUpdate {
     return $false
 }
 
-Export-ModuleMember -Function get-StoredLocation, set-StoredLocation, isAutoUpdate
+function setAutoUpdate([bool]$enable) {
+    $cfgKeys = getConfigNames
+
+    set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regAutoUpdate -value $enabled -Force
+}
+
+Export-ModuleMember -Function get-StoredLocation, set-StoredLocation, isAutoUpdate, setAutoUpdate

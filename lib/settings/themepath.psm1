@@ -1,8 +1,8 @@
 Import-Module -Name .\lib\settings\regpaths.psm1
 
-function get-SavedThemePath {
+function get-SavedThemePath([string]$basePath) {
     $cfgKeys = getConfigNames
-    $theme = "themes\theme_catalina.json"
+    $theme = "${basePath}\themes\theme_catalina.json"
     if (Test-Path -Path $cfgKeys.regPath) {
         $properties = Get-ItemProperty -Path $cfgKeys.regPath 
         if ($properties -and
