@@ -15,7 +15,7 @@ All images are (c) by Apple Inc.
 - it uses Windows location API to determine your geolocation
 - it calculates sunrise and susnet times for your geolocation
 - it applies wallpaper, lockscreen and system theme basing on the provided theme file (the format is self-explanatory)
-- you can override most of the (four, _d-uh_) settings using `regedit`: `HKCU:\Software\WrobelConsulting\Wallpaperer`
+- you can override most of the settings using either the provided `settings.ps1` file (run it using `settings.vba`) or via `regedit`: `HKCU:\Software\WrobelConsulting\Wallpaperer`
  - `Latitude` and `Longitude` define your location (you can specify your location here if you wish to have it private)
  - `Timestamp` defines last location acuire timestamp (re-acquire after `Timestamp` + 24h; you can add like a trailing `0` here if you don't want your location to be re-determined)
  - `Theme` defines current theme path to use
