@@ -39,5 +39,24 @@ function setWhiteTaskbarEnabled([bool]$enable) {
     set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regWhiteTaskbar -value $enable -Force
 }
 
+function isAutoBrightnessEnabled {
+    $cfgKeys = getConfigNames
 
-Export-ModuleMember -Function getSavedThemePath, setSavedThemePath, isWhiteTaskbarEnabled, setWhiteTaskbarEnabled
+    if (Test-Path -Path $cfgKeys.regPath) {
+        $properties = Get-ItemProperty -Path $cfgKeys.regPath 
+        if ($properties -and $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regBrightness)) {
+            return [System.Convert]::ToBoolean($properties.$($cfgKeys.regBrightness))
+        } else {
+            return $false
+        }
+    }
+    return $false
+}
+
+function setAutoBrightnessEnabled([bool]$enable) {
+    $cfgKeys = getConfigNames
+
+    set-itemproperty -path $cfgKeys.regPath -name $cfgKeys.regBrightness -value $enable -Force
+}
+
+Export-ModuleMember -Function getSavedThemePath, setSavedThemePath, isWhiteTaskbarEnabled, setWhiteTaskbarEnabled, isAutoBrightnessEnabled, setAutoBrightnessEnabled

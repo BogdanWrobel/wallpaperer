@@ -30,7 +30,9 @@ if ($null -ne $theme) {
     }
     $whiteTaskbar = isWhiteTaskbarEnabled
     setSystemAndAppTheme -section $settings.section -whiteTaskbar $whiteTaskbar
-    setScreenBrightness -brightness $settings.brightness
+    if (isAutoBrightnessEnabled) {
+        setScreenBrightness -brightness $settings.brightness
+    }
 } else {
     Write-Error "Failed to load theme '${themePath}', aborting."
 }

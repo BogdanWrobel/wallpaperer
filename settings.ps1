@@ -31,7 +31,7 @@ function get-SettingsForm {
 
 
     $settingsForm                    = New-Object system.Windows.Forms.Form
-    $settingsForm.ClientSize         = '290,231'
+    $settingsForm.ClientSize         = '290,251'
     $settingsForm.text               = "Wallpaperer"
     $settingsForm.TopMost            = $true
     $settingsForm.TopMost            = $true
@@ -94,7 +94,7 @@ function get-SettingsForm {
     $locationGroupbox.Font           = $Font
 
     $themeGroupBox                   = New-Object system.Windows.Forms.Groupbox
-    $themeGroupBox.height            = 64
+    $themeGroupBox.height            = 84
     $themeGroupBox.width             = 274
     $themeGroupBox.text              = "Theme"
     $themeGroupBox.location          = New-Object System.Drawing.Point(8,118)
@@ -123,11 +123,19 @@ function get-SettingsForm {
     $whiteTaskbarCheckBox.location   = New-Object System.Drawing.Point(17,40)
     $whiteTaskbarCheckBox.Font       = $Font
 
+    $adjustBacklightCheckBox          = New-Object system.Windows.Forms.CheckBox
+    $adjustBacklightCheckBox.text     = "Change screen brightness"
+    $adjustBacklightCheckBox.AutoSize = $false
+    $adjustBacklightCheckBox.width    = 202
+    $adjustBacklightCheckBox.height   = 20
+    $adjustBacklightCheckBox.location = New-Object System.Drawing.Point(17,60)
+    $adjustBacklightCheckBox.Font     = $Font
+
     $okButton                        = New-Object system.Windows.Forms.Button
     $okButton.text                   = "Save"
     $okButton.width                  = 90
     $okButton.height                 = 30
-    $okButton.location               = New-Object System.Drawing.Point(99,193)
+    $okButton.location               = New-Object System.Drawing.Point(99,213)
     $okButton.Font                   = $Font
 
     
@@ -140,7 +148,7 @@ function get-SettingsForm {
     
 
     $locationGroupbox.controls.AddRange(@($lonLabel,$latLabel,$lonTextBox,$latTextBox,$detectlocationButton,$autoLocationCheckBox))
-    $themeGroupBox.controls.AddRange(@($themeTextBox,$changeThemeButton,$whiteTaskbarCheckBox))
+    $themeGroupBox.controls.AddRange(@($themeTextBox,$changeThemeButton,$whiteTaskbarCheckBox,$adjustBacklightCheckBox))
     $settingsForm.controls.AddRange(@($locationGroupbox,$themeGroupBox,$okButton))
 
     $detectLocationClickHandler = { 
@@ -161,6 +169,7 @@ function get-SettingsForm {
         setStoredLocation -latitude $latTextBox.Text -longitude $lonTextBox.Text
         setAutoUpdateEnabled -enable $autoLocationCheckBox.Checked
         setWhiteTaskbarEnabled -enable $whiteTaskbarCheckBox.Checked
+        setAutoBrightnessEnabled -enable $adjustBacklightCheckBox.Checked
         setSavedThemePath -themePath $themeTextBox.Text
         $okButton.Text = "Applying..."
         $settingsForm.Enabled = $false
@@ -196,6 +205,7 @@ function get-SettingsForm {
     $themeTextBox.Lines = getSavedThemePath -basePath $PSScriptRoot
     $autoLocationCheckBox.Checked = isAutoUpdateEnabled
     $whiteTaskbarCheckBox.Checked = isWhiteTaskbarEnabled
+    $adjustBacklightCheckBox.Checked = isAutoBrightnessEnabled
 
     return $settingsForm
 }
