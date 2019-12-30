@@ -16,7 +16,7 @@ Import-Module -Name .\lib\system\theme.psm1
 Import-Module -Name .\lib\time\time.psm1
 Import-Module -Name .\lib\location\coordinates.psm1
 Import-Module -Name .\lib\regconfig\location.psm1
-Import-Module -Name .\lib\theme\themepath.psm1
+Import-Module -Name .\lib\theme\theme.psm1
 Import-Module -Name .\lib\regconfig\regpaths.psm1
 Import-Module -Name .\lib\system\brightness.psm1
 Import-Module -Name .\lib\wallpaperer\functions.psm1
@@ -31,7 +31,7 @@ function get-SettingsForm {
 
 
     $settingsForm                    = New-Object system.Windows.Forms.Form
-    $settingsForm.ClientSize         = '290,211'
+    $settingsForm.ClientSize         = '290,231'
     $settingsForm.text               = "Wallpaperer"
     $settingsForm.TopMost            = $true
     $settingsForm.TopMost            = $true
@@ -94,7 +94,7 @@ function get-SettingsForm {
     $locationGroupbox.Font           = $Font
 
     $themeGroupBox                   = New-Object system.Windows.Forms.Groupbox
-    $themeGroupBox.height            = 44
+    $themeGroupBox.height            = 64
     $themeGroupBox.width             = 274
     $themeGroupBox.text              = "Theme"
     $themeGroupBox.location          = New-Object System.Drawing.Point(8,118)
@@ -115,13 +115,22 @@ function get-SettingsForm {
     $changeThemeButton.location      = New-Object System.Drawing.Point(208,13)
     $changeThemeButton.Font          = $Font
 
+    $whiteTaskbarCheckBox            = New-Object system.Windows.Forms.CheckBox
+    $whiteTaskbarCheckBox.text       = "Use light taskbar for day theme"
+    $whiteTaskbarCheckBox.AutoSize   = $false
+    $whiteTaskbarCheckBox.width      = 202
+    $whiteTaskbarCheckBox.height     = 20
+    $whiteTaskbarCheckBox.location   = New-Object System.Drawing.Point(17,40)
+    $whiteTaskbarCheckBox.Font       = $Font
+
     $okButton                        = New-Object system.Windows.Forms.Button
     $okButton.text                   = "Save"
     $okButton.width                  = 90
     $okButton.height                 = 30
-    $okButton.location               = New-Object System.Drawing.Point(99,173)
+    $okButton.location               = New-Object System.Drawing.Point(99,193)
     $okButton.Font                   = $Font
 
+    
     # $trackBar                        = New-Object System.Windows.Forms.TrackBar
     # $trackBar.width                  = 400
     # $trackBar.height                 = 30
@@ -131,7 +140,7 @@ function get-SettingsForm {
     
 
     $locationGroupbox.controls.AddRange(@($lonLabel,$latLabel,$lonTextBox,$latTextBox,$detectlocationButton,$autoLocationCheckBox))
-    $themeGroupBox.controls.AddRange(@($themeTextBox,$changeThemeButton))
+    $themeGroupBox.controls.AddRange(@($themeTextBox,$changeThemeButton,$whiteTaskbarCheckBox))
     $settingsForm.controls.AddRange(@($locationGroupbox,$themeGroupBox,$okButton))
 
     $detectLocationClickHandler = { 
@@ -151,6 +160,7 @@ function get-SettingsForm {
     $saveSettingsClickHandler = {
         setStoredLocation -latitude $latTextBox.Text -longitude $lonTextBox.Text
         setAutoUpdateEnabled -enable $autoLocationCheckBox.Checked
+        setWhiteTaskbarEnabled -enable $whiteTaskbarCheckBox.Checked
         setSavedThemePath -themePath $themeTextBox.Text
         $okButton.Text = "Applying..."
         $settingsForm.Enabled = $false
@@ -185,6 +195,7 @@ function get-SettingsForm {
     $lonTextBox.Lines = $savedCoords.Longitude
     $themeTextBox.Lines = getSavedThemePath -basePath $PSScriptRoot
     $autoLocationCheckBox.Checked = isAutoUpdateEnabled
+    $whiteTaskbarCheckBox.Checked = isWhiteTaskbarEnabled
 
     return $settingsForm
 }

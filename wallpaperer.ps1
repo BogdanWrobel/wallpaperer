@@ -8,7 +8,7 @@ Import-Module -Name .\lib\system\theme.psm1
 Import-Module -Name .\lib\time\time.psm1
 Import-Module -Name .\lib\location\coordinates.psm1
 Import-Module -Name .\lib\regconfig\location.psm1
-Import-Module -Name .\lib\theme\themepath.psm1
+Import-Module -Name .\lib\theme\theme.psm1
 Import-Module -Name .\lib\regconfig\regpaths.psm1
 Import-Module -Name .\lib\system\brightness.psm1
 Import-Module -Name .\lib\wallpaperer\functions.psm1
@@ -28,7 +28,8 @@ if ($null -ne $theme) {
     } else {
         Write-Error "Image '${imgPath}' not found."
     }
-    setSystemAndAppTheme -section $settings.section
+    $whiteTaskbar = isWhiteTaskbarEnabled
+    setSystemAndAppTheme -section $settings.section -whiteTaskbar $whiteTaskbar
     setScreenBrightness -brightness $settings.brightness
 } else {
     Write-Error "Failed to load theme '${themePath}', aborting."

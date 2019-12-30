@@ -116,11 +116,16 @@ function getNameAndImage($theme) {
     return $state
 }
 
-function setSystemAndAppTheme([string]$section) {
+function setSystemAndAppTheme([string]$section, [bool]$whiteTaskbar) {
+    Write-Host $whiteTaskbar
     switch($section) {
         "day" {
             setLightAppTheme
-            setLightSystemTheme
+            if ($true -eq $whiteTaskbar) {
+                setLightSystemTheme
+            } else {
+                setDarkSystemTheme
+            }
         }
         "night" {
             setDarkAppTheme

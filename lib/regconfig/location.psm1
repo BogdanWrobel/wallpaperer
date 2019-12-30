@@ -38,7 +38,7 @@ function isAutoUpdateEnabled {
     if (Test-Path -Path $cfgKeys.regPath) {
         $properties = Get-ItemProperty -Path $cfgKeys.regPath 
         if ($properties -and $null -ne (Get-Member -InputObject $properties -Name $cfgKeys.regAutoUpdate)) {
-            return [bool](Get-ItemPropertyValue -Path $cfgKeys.regPath -Name $cfgKeys.regAutoUpdate)
+            return [System.Convert]::ToBoolean($properties.$($cfgKeys.regAutoUpdate))
         } else {
             return $false
         }

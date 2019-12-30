@@ -7,7 +7,8 @@ $wallpapererKeys = @{
     regLon = "Longitude"
     regStamp = "Timestamp"
     regTheme = "Theme"
-    regAutoUpdate = "AutoUpdate"    
+    regAutoUpdate = "AutoUpdate"
+    regWhiteTaskbar = "WhiteTaskbar"  
 }
 
 function getConfigNames {
