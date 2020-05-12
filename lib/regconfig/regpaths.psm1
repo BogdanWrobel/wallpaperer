@@ -17,13 +17,17 @@ function getConfigNames {
     return $wallpapererKeys
 }
 
-function ensureRegPathExists {
-    if (!(Test-Path -Path "${wallpapererKeys.baseReg}\${wallpapererKeys.companyReg}")) {
-        New-Item -Path "${wallpapererKeys.baseReg}\${wallpapererKeys.companyReg}"
+function ensureExists($path) {
+    Write-Host ("Testing for " + $path)
+    if (!(Test-Path -Path $path)) {
+        Write-Host ($path + " does not exist, creating.")
+        New-Item -Path $path
     }
-    if (!(Test-Path -Path $wallpapererKeys.regPath)) {
-        New-Item -Path $wallpapererKeys.regPath
-    } 
+}
+
+function ensureRegPathExists {
+    ensureExists -path ($wallpapererKeys.baseReg + "\" + $wallpapererKeys.companyReg)
+    ensureExists -path $wallpapererKeys.regPath
 }
 
 Export-ModuleMember -Function getConfigNames, ensureRegPathExists
