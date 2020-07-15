@@ -29,7 +29,8 @@ if ($null -ne $theme) {
         Write-Error "Image '${imgPath}' not found."
     }
     $whiteTaskbar = isWhiteTaskbarEnabled
-    setSystemAndAppTheme -section $settings.section -whiteTaskbar $whiteTaskbar
+    $keepTheme = isKeepTheme
+    setSystemAndAppTheme -section $settings.section -whiteTaskbar $whiteTaskbar -keepTheme $keepTheme
     if (isAutoBrightnessEnabled) {
         setScreenBrightness -brightness $settings.brightness
     }

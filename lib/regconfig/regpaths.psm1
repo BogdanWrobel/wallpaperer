@@ -10,6 +10,7 @@ $wallpapererKeys = @{
     regAutoUpdate = "AutoUpdate"
     regWhiteTaskbar = "WhiteTaskbar"  
     regBrightness = "AdjustBrightness"
+    regKeepTheme = "PreserveColorTheme"
 }
 
 function getConfigNames {

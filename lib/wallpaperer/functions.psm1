@@ -116,11 +116,13 @@ function getNameAndImage($theme) {
     return $state
 }
 
-function setSystemAndAppTheme([string]$section, [bool]$whiteTaskbar) {
+function setSystemAndAppTheme([string]$section, [bool]$whiteTaskbar, [bool]$keepTheme) {
     Write-Host $whiteTaskbar
     switch($section) {
         "day" {
-            setLightAppTheme
+            if ($false -eq $keepTheme) {
+                setLightAppTheme
+            }
             if ($true -eq $whiteTaskbar) {
                 setLightSystemTheme
             } else {
@@ -128,15 +130,21 @@ function setSystemAndAppTheme([string]$section, [bool]$whiteTaskbar) {
             }
         }
         "night" {
-            setDarkAppTheme
+            if ($false -eq $keepTheme) {
+                setDarkAppTheme
+            }
             setDarkSystemTheme
         }
         "sunset" {
-            setLightAppTheme
+            if ($false -eq $keepTheme) {
+                setLightAppTheme
+            }
             setDarkSystemTheme
         }
         "sunrise" {
-            setLightAppTheme
+            if ($false -eq $keepTheme) {
+                setLightAppTheme
+            }
             setDarkSystemTheme
         }
     }
